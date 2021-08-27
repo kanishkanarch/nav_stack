@@ -1,16 +1,16 @@
 <launch>
 <master auto="start"/>
-<arg name="map_file" default="$(find nav_stack)/mymap.yaml"/>
 <!-- Run the map server -->
 <node name="map_server" pkg="map_server" type="map_server" args="/home/kanishk/ros_ws/turtlebot3/src/turtlebot3_simulations/map.yaml"/> 
-<!--- Run AMCL -->
+<!-- Run AMCL -->
 <include file="$(find amcl)/examples/amcl_omni.launch" />
 <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-<param name="base_global_planner" value="ADAstar_planner/ADAstarPlannerROS"/>
+<!-- <param name="base_global_planner" value="ADAstar_planner/ADAstarPlannerROS"/> -->
 <rosparam file="$(find nav_stack)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
 <rosparam file="$(find nav_stack)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
 <rosparam file="$(find nav_stack)/config/local_costmap_params.yaml" command="load" />
 <rosparam file="$(find nav_stack)/config/global_costmap_params.yaml" command="load" />
 <rosparam file="$(find nav_stack)/config/base_local_planner_params.yaml" command="load" />
 </node>
+<node type="rviz" name="rviz" pkg="rviz" args="-d $(find nav_stack)/../nav.rviz" />
 </launch> 
