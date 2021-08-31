@@ -335,7 +335,7 @@ for (uint i=0; i<mapSize; i++)
    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
 
 
-   cout<<"time to generate best global path by Anytime Dynamic A* = " << (diff(time1,time2).tv_sec)*1e3 + (diff(time1,time2).tv_nsec)*1e-6 << " microseconds" << endl;
+   cout<<"time to generate Straight line = " << (diff(time1,time2).tv_sec)*1e3 + (diff(time1,time2).tv_nsec)*1e-6 << " microseconds" << endl;
    
    MyExcelFile <<"\t"<< (diff(time1,time2).tv_sec)*1e3 + (diff(time1,time2).tv_nsec)*1e-6 ;
 
@@ -352,54 +352,139 @@ for (uint i=0; i<mapSize; i++)
 /*********************************************************************************/
 vector<int> ADAstarPlannerROS::findPath(int startCell, int goalCell, float g_score[])
 {
-	value++;
-	vector<int> bestPath;
-	vector<int> emptyPath;
-	cells CP;
-
-	multiset<cells> OPL;
-	int currentCell;
-
-	//calculate g_score and f_score of the start position
-	g_score[startCell]=0;
-	CP.currentCell=startCell;
-	CP.fCost=g_score[startCell]+calculateHCost(startCell,goalCell);
-
-	//add the start cell to the open list
-	OPL.insert(CP);
-	currentCell=startCell;
-
-	//while the open list is not empty continuie the search or g_score(goalCell) is equal to infinity
-	while (!OPL.empty()&& g_score[goalCell]==infinity) 
+	cout << "Start cell: " << startCell << " (" << getCellRowID(startCell) <<", " << getCellColID(startCell) <<")"<< ", Goal cell: " << goalCell << " (" << getCellRowID(goalCell) <<", " << getCellColID(goalCell) <<")"<< endl;
+	int start_x = getCellRowID(startCell);
+	int start_y = getCellColID(startCell);
+	int goal_x = getCellRowID(goalCell);
+	int goal_y = getCellColID(goalCell);
+	vector <int> bestPath;
+	bestPath.push_back(startCell);
+	int iterator = 0;
+	float dx = goal_x - start_x;
+	float dy = goal_y - start_y;
+	float abs_dx = dx;
+	float abs_dy = dy;
+	(abs_dx<0)?(abs_dx = -1*abs_dx):(abs_dx = abs_dx);
+	(abs_dy<0)?(abs_dy = -1*abs_dy):(abs_dy = abs_dy);
+	int x = start_x;
+	int y = start_y;
+	float x_est;
+	float y_est;
+	while ((x != goal_x) && (y != goal_y))
 	{
-		//choose the cell that has the lowest cost fCost in the open set which is the begin of the multiset
-		currentCell = OPL.begin()->currentCell;
-		//remove the currentCell from the openList
-		OPL.erase(OPL.begin());
-		//search the neighbors of the current Cell
-		vector <int> neighborCells; 
-		neighborCells=findFreeNeighborCell(currentCell);
-		for(uint i=0; i<neighborCells.size(); i++) //for each neighbor v of current cell
+		if(abs_dx > abs_dy)
 		{
-			// if the g_score of the neighbor is equal to INF: unvisited cell
-			if(g_score[neighborCells[i]]==infinity)
+			if ((goal_x > start_x) && (goal_y > start_y))
 			{
-				g_score[neighborCells[i]]=g_score[currentCell]+getMoveCost(currentCell,neighborCells[i]);
-				addNeighborCellToOpenList(OPL, neighborCells[i], goalCell, g_score); 
-			}//end if
-		}//end for
-	}//end while
+				x+=1;
+				y_est = start_y + (dy/dx)*(x - start_x);
+				((y_est - y)>(y+1 - y_est)) ? (y = y+1) : (y = y);
+				bestPath.push_back(getCellIndex(x, y));
+			}
+			else if ((goal_x > start_x) && (goal_y <= start_y))
+			{
+				x+=1;
+				y_est = start_y + dy/dx*(x - start_x);
+				((y - y_est) > (y_est - y-1)) ? (y = y-1) : (y = y);
+				bestPath.push_back(getCellIndex(x, y));
+			}
+			else if ((goal_x <= start_x) && (goal_y > start_y))
+			{
+				x-=1;
+				y_est = start_y + dy/dx*(x - start_x);
+				((y_est - y)>(y+1 - y_est)) ? (y = y+1) : (y = y);
+				bestPath.push_back(getCellIndex(x, y));
+			}
+			else if ((goal_x <= start_x) && (goal_y <= start_y))
+			{
+				x-=1;
+				y_est = start_y + dy/dx*(x - start_x);
+				((y - y_est) > (y_est - y-1)) ? (y = y-1) : (y = y);
+				bestPath.push_back(getCellIndex(x, y));
+			}
 
-	if(g_score[goalCell]!=infinity)  // if g_score(goalcell)==INF : construct path 
-	{
-		bestPath=constructPath(startCell, goalCell, g_score);
-		return   bestPath; 
+		}
+		else
+		{
+			if ((goal_x > start_x) && (goal_y > start_y))
+			{
+				y+=1;
+				x_est = start_x + (dx/dy)*(y - start_y);
+				((x_est - x)>(x+1 - x_est)) ? (x = x+1) : (x = x);
+				bestPath.push_back(getCellIndex(x, y));
+			}
+			else if ((goal_x > start_x) && (goal_y <= start_y))
+			{
+				y+=1;
+				x_est = start_x + (dx/dy)*(y - start_y);
+				((x_est - x)>(x+1 - x_est)) ? (x = x+1) : (x = x);
+				bestPath.push_back(getCellIndex(x, y));
+			}
+			else if ((goal_x <= start_x) && (goal_y > start_y))
+			{
+				y-=1;
+				x_est = start_x + (dx/dy)*(y - start_y);
+				((x - x_est)>(x_est - x-1)) ? (x = x-1) : (x = x);
+				bestPath.push_back(getCellIndex(x, y));
+			}
+			else if ((goal_x <= start_x) && (goal_y <= start_y))
+			{
+				y-=1;
+				x_est = start_x + (dx/dy)*(y - start_y);
+				((x - x_est)>(x_est - x-1)) ? (x = x-1) : (x = x);
+				bestPath.push_back(getCellIndex(x, y));
+			}
+		}
 	}
-	else
-	{
-		cout << "Failure to find a path !" << endl;
-		return emptyPath;
-	}
+	return bestPath;
+//	value++;
+//	vector<int> bestPath;
+//	vector<int> emptyPath;
+//	cells CP;
+//
+//	multiset<cells> OPL;
+//	int currentCell;
+//
+//	//calculate g_score and f_score of the start position
+//	g_score[startCell]=0;
+//	CP.currentCell=startCell;
+//	CP.fCost=g_score[startCell]+calculateHCost(startCell,goalCell);
+//
+//	//add the start cell to the open list
+//	OPL.insert(CP);
+//	currentCell=startCell;
+//
+//	//while the open list is not empty continuie the search or g_score(goalCell) is equal to infinity
+//	while (!OPL.empty()&& g_score[goalCell]==infinity) 
+//	{
+//		//choose the cell that has the lowest cost fCost in the open set which is the begin of the multiset
+//		currentCell = OPL.begin()->currentCell;
+//		//remove the currentCell from the openList
+//		OPL.erase(OPL.begin());
+//		//search the neighbors of the current Cell
+//		vector <int> neighborCells; 
+//		neighborCells=findFreeNeighborCell(currentCell);
+//		for(uint i=0; i<neighborCells.size(); i++) //for each neighbor v of current cell
+//		{
+//		// if the g_score of the neighbor is equal to INF: unvisited cell
+//			if(g_score[neighborCells[i]]==infinity)
+//			{
+//				g_score[neighborCells[i]]=g_score[currentCell]+getMoveCost(currentCell,neighborCells[i]);
+//				addNeighborCellToOpenList(OPL, neighborCells[i], goalCell, g_score); 
+//			}//end if
+//		}//end for
+//	}//end while
+//
+//	if(g_score[goalCell]!=infinity)  // if g_score(goalcell)==INF : construct path 
+//	{
+//		bestPath=constructPath(startCell, goalCell, g_score);
+//		return   bestPath; 
+//	}
+//	else
+//	{
+//		cout << "Failure to find a path !" << endl;
+//		return emptyPath;
+//	}
 }
 
 /*******************************************************************************/
