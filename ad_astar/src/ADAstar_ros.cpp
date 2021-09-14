@@ -47,7 +47,6 @@ bool* OGM;
 static const float INFINIT_COST = INT_MAX; //!< cost of non connected nodes
 float infinity = std::numeric_limits< float >::infinity();
 float tBreak;  // coefficient for breaking ties
-ofstream MyExcelFile ("ADA_result.xlsx", ios::trunc);
 
 int clock_gettime(clockid_t clk_id, struct timespect *tp);
 
@@ -123,7 +122,6 @@ void ADAstarPlannerROS::initialize(std::string name, costmap_2d::Costmap2DROS* c
     }
 
 
-	MyExcelFile << "StartID\tStartX\tStartY\tGoalID\tGoalX\tGoalY\tPlannertime(ms)\tpathLength\tnumberOfCells\t" << endl;
 
     ROS_INFO("ADAstar planner initialized successfully");
     initialized_ = true;
@@ -180,7 +178,6 @@ bool ADAstarPlannerROS::makePlan(const geometry_msgs::PoseStamped& start, const 
 
     goalCell = convertToCellIndex(goalX, goalY);
 
-MyExcelFile << startCell <<"\t"<< start.pose.position.x <<"\t"<< start.pose.position.y <<"\t"<< goalCell <<"\t"<< goal.pose.position.x <<"\t"<< goal.pose.position.y;
 
   }
   else
@@ -244,7 +241,6 @@ MyExcelFile << startCell <<"\t"<< start.pose.position.x <<"\t"<< start.pose.posi
 	   last_pose = *it;
 	}
 	cout <<"The global path length: "<< path_length<< " meters"<<endl;
-	MyExcelFile << "\t" <<path_length <<"\t"<< plan.size() <<endl;
       //publish the plan
 
       return true;
@@ -319,25 +315,27 @@ vector<int> ADAstarPlannerROS::ADAstarPlanner(int startCell, int goalCell){
 
    vector<int> bestPath;
 
+cout<<endl<<"MapSize is: "<<mapSize<<endl;
 
 //float g_score [mapSize][2];
-float g_score [mapSize];
+//float g_score [mapSize];
 
-for (uint i=0; i<mapSize; i++)
-	g_score[i]=infinity;
+
+for (int i=0; i<mapSize; i++)
+//	g_score[i]=infinity;
 
    timespec time1, time2;
   /* take current time here */
-   clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
+//   clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
 
-  bestPath=findPath(startCell, goalCell,  g_score);
+//  bestPath=findPath(startCell, goalCell,  g_score);
+  bestPath=findPath(startCell, goalCell);
 
-   clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
+  // clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
 
 
-   cout<<"time to generate Straight line = " << (diff(time1,time2).tv_sec)*1e3 + (diff(time1,time2).tv_nsec)*1e-6 << " microseconds" << endl;
+//   cout<<"time to generate Straight line = " << (diff(time1,time2).tv_sec)*1e3 + (diff(time1,time2).tv_nsec)*1e-6 << " microseconds" << endl;
    
-   MyExcelFile <<"\t"<< (diff(time1,time2).tv_sec)*1e3 + (diff(time1,time2).tv_nsec)*1e-6 ;
 
   return bestPath;
 
@@ -350,7 +348,8 @@ for (uint i=0; i<mapSize; i++)
 //Output: the best path
 //Description: it is used to generate the robot free path
 /*********************************************************************************/
-vector<int> ADAstarPlannerROS::findPath(int startCell, int goalCell, float g_score[])
+//vector<int> ADAstarPlannerROS::findPath(int startCell, int goalCell, float g_score[])
+vector<int> ADAstarPlannerROS::findPath(int startCell, int goalCell)
 {
 	cout << "Start cell: " << startCell << " (" << getCellRowID(startCell) <<", " << getCellColID(startCell) <<")"<< ", Goal cell: " << goalCell << " (" << getCellRowID(goalCell) <<", " << getCellColID(goalCell) <<")"<< endl;
 	int start_x = getCellRowID(startCell);
@@ -437,54 +436,6 @@ vector<int> ADAstarPlannerROS::findPath(int startCell, int goalCell, float g_sco
 		}
 	}
 	return bestPath;
-//	value++;
-//	vector<int> bestPath;
-//	vector<int> emptyPath;
-//	cells CP;
-//
-//	multiset<cells> OPL;
-//	int currentCell;
-//
-//	//calculate g_score and f_score of the start position
-//	g_score[startCell]=0;
-//	CP.currentCell=startCell;
-//	CP.fCost=g_score[startCell]+calculateHCost(startCell,goalCell);
-//
-//	//add the start cell to the open list
-//	OPL.insert(CP);
-//	currentCell=startCell;
-//
-//	//while the open list is not empty continuie the search or g_score(goalCell) is equal to infinity
-//	while (!OPL.empty()&& g_score[goalCell]==infinity) 
-//	{
-//		//choose the cell that has the lowest cost fCost in the open set which is the begin of the multiset
-//		currentCell = OPL.begin()->currentCell;
-//		//remove the currentCell from the openList
-//		OPL.erase(OPL.begin());
-//		//search the neighbors of the current Cell
-//		vector <int> neighborCells; 
-//		neighborCells=findFreeNeighborCell(currentCell);
-//		for(uint i=0; i<neighborCells.size(); i++) //for each neighbor v of current cell
-//		{
-//		// if the g_score of the neighbor is equal to INF: unvisited cell
-//			if(g_score[neighborCells[i]]==infinity)
-//			{
-//				g_score[neighborCells[i]]=g_score[currentCell]+getMoveCost(currentCell,neighborCells[i]);
-//				addNeighborCellToOpenList(OPL, neighborCells[i], goalCell, g_score); 
-//			}//end if
-//		}//end for
-//	}//end while
-//
-//	if(g_score[goalCell]!=infinity)  // if g_score(goalcell)==INF : construct path 
-//	{
-//		bestPath=constructPath(startCell, goalCell, g_score);
-//		return   bestPath; 
-//	}
-//	else
-//	{
-//		cout << "Failure to find a path !" << endl;
-//		return emptyPath;
-//	}
 }
 
 /*******************************************************************************/
@@ -493,34 +444,35 @@ vector<int> ADAstarPlannerROS::findPath(int startCell, int goalCell, float g_sco
 //Output: the best path
 //Description: it is used to construct the robot path
 /*********************************************************************************/
-vector<int> ADAstarPlannerROS::constructPath(int startCell, int goalCell,float g_score[])
-{
-	vector<int> bestPath;
-	vector<int> path;
-
-	path.insert(path.begin()+bestPath.size(), goalCell);
-	int currentCell=goalCell;
-
-	while(currentCell!=startCell)
-	{ 
-		vector <int> neighborCells;
-		neighborCells=findFreeNeighborCell(currentCell);
-
-		vector <float> gScoresNeighbors;
-		for(uint i=0; i<neighborCells.size(); i++)
-			gScoresNeighbors.push_back(g_score[neighborCells[i]]);
-		
-		int posMinGScore=distance(gScoresNeighbors.begin(), min_element(gScoresNeighbors.begin(), gScoresNeighbors.end()));
-		currentCell=neighborCells[posMinGScore];
-
-		//insert the neighbor in the path
-		path.insert(path.begin()+path.size(), currentCell);
-	}
-	for(uint i=0; i<path.size(); i++)
-		bestPath.insert(bestPath.begin()+bestPath.size(), path[path.size()-(i+1)]);
-
-	return bestPath;
-}
+//vector<int> ADAstarPlannerROS::constructPath(int startCell, int goalCell,float g_score[])
+//vector<int> ADAstarPlannerROS::constructPath(int startCell, int goalCell)
+//{
+//	vector<int> bestPath;
+//	vector<int> path;
+//
+//	path.insert(path.begin()+bestPath.size(), goalCell);
+//	int currentCell=goalCell;
+//
+//	while(currentCell!=startCell)
+//	{ 
+//		vector <int> neighborCells;
+//		neighborCells=findFreeNeighborCell(currentCell);
+//
+//		vector <float> gScoresNeighbors;
+//		for(uint i=0; i<neighborCells.size(); i++)
+//			gScoresNeighbors.push_back(g_score[neighborCells[i]]);
+//		
+//		int posMinGScore=distance(gScoresNeighbors.begin(), min_element(gScoresNeighbors.begin(), gScoresNeighbors.end()));
+//		currentCell=neighborCells[posMinGScore];
+//
+//		//insert the neighbor in the path
+//		path.insert(path.begin()+path.size(), currentCell);
+//	}
+//	for(uint i=0; i<path.size(); i++)
+//		bestPath.insert(bestPath.begin()+bestPath.size(), path[path.size()-(i+1)]);
+//
+//	return bestPath;
+//}
 
 /*******************************************************************************/
 //Function Name: calculateHCost
@@ -551,16 +503,16 @@ float ADAstarPlannerROS::calculateHCost(int cellID, int goalCell)
 //Output: 
 //Description: it is used to add a neighbor Cell to the open list
 /*********************************************************************************/
-void ADAstarPlannerROS::addNeighborCellToOpenList(multiset<cells> & OPL, int neighborCell, int goalCell, float g_score[])
-{
-	cells CP;
-	CP.currentCell=neighborCell; //insert the neighbor cell
-	CP.fCost=g_score[neighborCell]+calculateHCost(neighborCell,goalCell);
-	OPL.insert(CP);
-	//multiset<cells>::iterator it = OPL.lower_bound(CP);
-	//multiset<cells>::iterator it = OPL.upper_bound(CP);
-	//OPL.insert( it, CP  );
-}
+//void ADAstarPlannerROS::addNeighborCellToOpenList(multiset<cells> & OPL, int neighborCell, int goalCell, float g_score[])
+//{
+//	cells CP;
+//	CP.currentCell=neighborCell; //insert the neighbor cell
+//	CP.fCost=g_score[neighborCell]+calculateHCost(neighborCell,goalCell);
+//	OPL.insert(CP);
+//	//multiset<cells>::iterator it = OPL.lower_bound(CP);
+//	//multiset<cells>::iterator it = OPL.upper_bound(CP);
+//	//OPL.insert( it, CP  );
+//}
 
   /*******************************************************************************
  * Function Name: findFreeNeighborCell
