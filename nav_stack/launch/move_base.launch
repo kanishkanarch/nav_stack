@@ -1,7 +1,7 @@
 <launch>
 <master auto="start"/>
 <!-- Run the map server -->
-<node name="map_server" pkg="map_server" type="map_server" args="/home/kanishk/ros_ws/turtlebot3/src/turtlebot3_simulations/map_world.yaml"/> 
+<node name="map_server" pkg="map_server" type="map_server" args="$(find nav_stack)/map_house.yaml"/>
 <!-- Run AMCL -->
 <include file="$(find amcl)/examples/amcl_omni.launch" />
 <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
