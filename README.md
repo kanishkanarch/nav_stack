@@ -9,3 +9,9 @@ To quickstart,
 3. Planner should be available as a plugin to `nav_core::BaseGlobalPlanner` now. Try launching `roslaunch nav_stack move_base.launch` with turtlebot3_house/turtlebot3_world.
 
 To customize, put in your own algorithm inside the `findPath` function in `template_planner_pkg/src/template_planner.cpp`.
+
+### Branches:
+
+1. `master`: Template code that can be customized.
+
+2. `Straight-line`: Straight line planner.
