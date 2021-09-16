@@ -280,7 +280,6 @@ cout<<endl<<"MapSize is: "<<mapSize<<endl;
 //Output: the best path
 //Description: it is used to generate the robot free path
 /*********************************************************************************/
-//vector<int> straight_planner::findPath(int startCell, int goalCell, float g_score[])
 vector<int> straight_planner::findPath(int startCell, int goalCell)
 {
 	cout << "Start cell: " << startCell << " (" << getCellRowID(startCell) <<", " << getCellColID(startCell) <<")"<< ", Goal cell: " << goalCell << " (" << getCellRowID(goalCell) <<", " << getCellColID(goalCell) <<")"<< endl;
