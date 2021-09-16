@@ -267,7 +267,7 @@ cout<<endl<<"MapSize is: "<<mapSize<<endl;
 
 
 
-  bestPath=findPath(startCell, goalCell);
+  bestPath=findPath(startCell, goalCell, width, height);
 
   return bestPath;
 
@@ -276,13 +276,13 @@ cout<<endl<<"MapSize is: "<<mapSize<<endl;
 
 /*******************************************************************************/
 //Function Name: findPath
-//Inputs: the map layout, the start and the goal Cells and a boolean to indicate if we will use break ties or not
+//Inputs: Start and goal cells in form of row-major index of single dimentional 1xwidth*height array, width and height of the grid.
 //Output: the best path
 //Description: it is used to generate the robot free path
 /*********************************************************************************/
-vector<int> straight_planner::findPath(int startCell, int goalCell)
+vector<int> straight_planner::findPath(int startCell, int goalCell, int width, int height)
 {
-	cout << "Start cell: " << startCell << " (" << getCellRowID(startCell) <<", " << getCellColID(startCell) <<")"<< ", Goal cell: " << goalCell << " (" << getCellRowID(goalCell) <<", " << getCellColID(goalCell) <<")"<< endl;
+	cout<<endl<<"Width & Height of the map: "<<width<<" "<<height<<endl;
 	int start_x = getCellRowID(startCell);
 	int start_y = getCellColID(startCell);
 	int goal_x = getCellRowID(goalCell);
