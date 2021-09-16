@@ -1,5 +1,0 @@
-<library path="lib/libad_astar_lib">
-	<class name="ADAstar_planner/ADAstarPlannerROS" type="ADAstar_planner::ADAstarPlannerROS" base_class_type="nav_core::BaseGlobalPlanner">
-		<description>This is ADA* global planner.</description>
-	</class>
-</library>
