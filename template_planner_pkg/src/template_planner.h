@@ -68,7 +68,7 @@ public:
   bool isCellInsideMap(float x, float y);
   void mapToWorld(double mx, double my, double& wx, double& wy);
   vector<int> planner_func(int startCell, int goalCell);
-  vector<int> findPath(int startCell, int goalCell);
+  vector<int> findPath(int startCell, int goalCell, int width, int height);
   vector <int> findFreeNeighborCell (int CellID);
   bool isStartAndGoalCellsValid(int startCell,int goalCell); 
   bool isFree(int CellID); //returns true if the cell is Free

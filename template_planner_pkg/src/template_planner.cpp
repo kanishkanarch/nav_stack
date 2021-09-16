@@ -267,7 +267,7 @@ cout<<endl<<"MapSize is: "<<mapSize<<endl;
 
 
 
-  bestPath=findPath(startCell, goalCell);
+  bestPath=findPath(startCell, goalCell, width, height);
 
   return bestPath;
 
@@ -276,11 +276,11 @@ cout<<endl<<"MapSize is: "<<mapSize<<endl;
 
 /*******************************************************************************/
 //Function Name: findPath | Uncomment template algorithm to see working of this planner. Please write your algorithm inside this function.
-//Inputs: the map layout, the start and the goal Cells and a boolean to indicate if we will use break ties or not
+//Inputs: Start and goal cells in form of row-major index of single dimentional 1xwidth*height array, width and height of the grid.
 //Output: the best path
 //Description: it is used to generate the robot free path
 /*********************************************************************************/
-vector<int> template_planner::findPath(int startCell, int goalCell)
+vector<int> template_planner::findPath(int startCell, int goalCell, int width, int height)
 {  
 
 // Uncomment template algorithm to see working of this planner. Please write your algorithm here.
