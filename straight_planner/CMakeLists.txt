@@ -125,7 +125,7 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/straight_planner.cpp
 # )
-add_library(straight_planner_lib src/straight_planner.cpp)
+add_library(straight_line_planner_lib src/straight_planner.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

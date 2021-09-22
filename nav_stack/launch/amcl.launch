@@ -33,6 +33,7 @@
     <param name="laser_lambda_short"        value="0.1"/>
     <param name="laser_likelihood_max_dist" value="2.0"/>
     <param name="laser_model_type"          value="likelihood_field"/>
+	<param name="use_map_topic"				value="true"/>
 
     <param name="odom_model_type"           value="diff"/>
     <param name="odom_alpha1"               value="0.1"/>
