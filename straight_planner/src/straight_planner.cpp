@@ -17,22 +17,6 @@ inline vector <int> findFreeNeighborCell (int CellID);
 namespace straight_planner_ns
 {
 
-//Default Constructor
-straight_planner::straight_planner()
-{
-
-}
-straight_planner::straight_planner(ros::NodeHandle &nh)
-{
-  ROSNodeHandle = nh;
-
-}
-
-straight_planner::straight_planner(std::string name, costmap_2d::Costmap2DROS* costmap_ros)
-{
-  initialize(name, costmap_ros);
-}
-
 void straight_planner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros)
 {
 
@@ -41,19 +25,14 @@ void straight_planner::initialize(std::string name, costmap_2d::Costmap2DROS* co
     costmap_ros_ = costmap_ros;
     costmap_ = costmap_ros_->getCostmap();
 
-    ros::NodeHandle private_nh("~/" + name);
-
     originX = costmap_->getOriginX();
     originY = costmap_->getOriginY();
-
-
 
 	width = costmap_->getSizeInCellsX();
 	height = costmap_->getSizeInCellsY();
 	resolution = costmap_->getResolution();
 	mapSize = width*height;
 	value =0;
-
 
 	OGM = new bool [mapSize]; 
     for (unsigned int iy = 0; iy < costmap_->getSizeInCellsY(); iy++)

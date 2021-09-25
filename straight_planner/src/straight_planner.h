@@ -48,12 +48,6 @@ namespace straight_planner_ns {
 class straight_planner : public nav_core::BaseGlobalPlanner {
 public:
   
-  straight_planner (ros::NodeHandle &); //this constructor is may be not needed
-  straight_planner ();
-  straight_planner(std::string name, costmap_2d::Costmap2DROS* costmap_ros);
-  
-  ros::NodeHandle ROSNodeHandle;
-  
   /** overriden classes from interface nav_core::BaseGlobalPlanner **/
   void initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros);
   bool makePlan(const geometry_msgs::PoseStamped& start, 
@@ -91,11 +85,21 @@ public:
   float originY;
   float resolution;
   costmap_2d::Costmap2DROS* costmap_ros_;
-  double step_size_, min_dist_from_robot_;
   costmap_2d::Costmap2D* costmap_;
   bool initialized_;
   int width;
   int height;
+  ~straight_planner()
+  {
+//  	delete originX;
+//	delete originY;
+//	delete resolution
+//	delete initialized_;
+//	delete width;
+//	delete height;
+	delete costmap_ros_;
+	delete costmap_;
+  }  
 };
 
 };
