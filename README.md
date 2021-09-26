@@ -46,3 +46,4 @@ Return value must be a vector of integers representing index values of cells whi
 
 2. `Straight-line`: Straight line planner.
 
+3. `Dual-line`: Dual line planner.
