@@ -20,3 +20,4 @@ A simple configuration setup is provided in the `nav_stack` folder consisting of
 
 2. `Straight-line`: Straight line planner.
 
+3. `Dual-line`: Dual line planner.
