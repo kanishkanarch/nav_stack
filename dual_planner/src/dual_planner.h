@@ -39,13 +39,13 @@
 using namespace std;
 using std::string;
 
-#ifndef STRAIGHT_ROS_CPP
-#define STRAIGHT_ROS_CPP
+#ifndef DUAL_ROS_CPP
+#define DUAL_ROS_CPP
 
 
-namespace straight_planner_ns {
+namespace dual_planner_ns {
   
-class straight_planner : public nav_core::BaseGlobalPlanner {
+class dual_planner : public nav_core::BaseGlobalPlanner {
 public:
   
   /** overriden classes from interface nav_core::BaseGlobalPlanner **/
@@ -61,8 +61,8 @@ public:
   void convertToCoordinate(int index, float& x, float& y);
   bool isCellInsideMap(float x, float y);
   void mapToWorld(double mx, double my, double& wx, double& wy);
-  vector<int> planner_func(int startCell, int goalCell);
-  vector<int> findPath(int startCell, int goalCell, int width, int height);
+  vector<int> planner_func(int startCell, int goalCell, int turnCell);
+  vector<int> findPath(int startCell, int goalCell);
   vector <int> findFreeNeighborCell (int CellID);
   bool isStartAndGoalCellsValid(int startCell,int goalCell); 
   bool isFree(int CellID); //returns true if the cell is Free
@@ -89,7 +89,7 @@ public:
   bool initialized_;
   int width;
   int height;
-  ~straight_planner()
+  ~dual_planner()
   {
 //  	delete originX;
 //	delete originY;

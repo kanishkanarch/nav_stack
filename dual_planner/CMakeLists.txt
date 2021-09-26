@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(straight_planner)
+project(dual_planner)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -105,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES straight_planner
+#  LIBRARIES dual_planner
 #  CATKIN_DEPENDS nav_core roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
@@ -123,9 +123,9 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/straight_planner.cpp
+#   src/${PROJECT_NAME}/dual_planner.cpp
 # )
-add_library(straight_line_planner_lib src/straight_planner.cpp)
+add_library(dual_line_planner_lib src/dual_planner.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -135,7 +135,7 @@ add_library(straight_line_planner_lib src/straight_planner.cpp)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/straight_planner_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/dual_planner_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -199,7 +199,7 @@ add_library(straight_line_planner_lib src/straight_planner.cpp)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_straight_planner.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_dual_planner.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

@@ -1,0 +1,5 @@
+<library path="lib/libdual_line_planner_lib">
+<class name="dual_planner_ns/dual_planner" type="dual_planner_ns::dual_planner" base_class_type="nav_core::BaseGlobalPlanner">
+<description>This is a dual line global planner.</description>
+</class>
+</library>
