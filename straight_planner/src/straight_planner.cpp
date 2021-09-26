@@ -78,12 +78,6 @@ bool straight_planner::makePlan(const geometry_msgs::PoseStamped& start, const g
     return false;
   }
 
-  tf::Stamped < tf::Pose > goal_tf;
-  tf::Stamped < tf::Pose > start_tf;
-
-  poseStampedMsgToTF(goal, goal_tf);
-  poseStampedMsgToTF(start, start_tf);
-
   // convert the start and goal positions
 
   float startX = start.pose.position.x;
