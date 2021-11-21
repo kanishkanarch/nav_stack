@@ -255,7 +255,11 @@ cout<<endl<<"MapSize is: "<<mapSize<<endl;
 /*********************************************************************************/
 vector<int> straight_planner::findPath(int startCell, int goalCell, int width, int height)
 {
-	cout<<endl<<"Width & Height of the map: "<<width<<" "<<height<<endl;
+	vector <int> bestPath;
+	bestPath.push_back(startCell);
+	bestPath.push_back(goalCell);
+	return bestPath;
+	/*cout<<endl<<"Width & Height of the map: "<<width<<" "<<height<<endl;
 	int start_x = getCellRowID(startCell);
 	int start_y = getCellColID(startCell);
 	int goal_x = getCellRowID(goalCell);
@@ -340,6 +344,7 @@ vector<int> straight_planner::findPath(int startCell, int goalCell, int width, i
 		}
 	}
 	return bestPath;
+	*/
 }
 
 
