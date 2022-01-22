@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>template_planner_pkg</name>
+  <name>minimal_planner</name>
   <version>0.0.0</version>
-  <description>The template_planner_pkg package</description>
+  <description>The minimal_planner package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/template_planner_pkg</url> -->
+  <!-- <url type="website">http://wiki.ros.org/minimal_planner</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -66,7 +66,7 @@
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->
-	<nav_core plugin = "${prefix}/template_planner_plugin.xml"/>
+	  <nav_core plugin="$(prefix)/minimal_planner_plugin.xml" />
 
   </export>
 </package>
